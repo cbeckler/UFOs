@@ -6,11 +6,10 @@ const tableData = data;
 var tbody = d3.select("tbody");
 
 // create function to build table for UFO data
-function buildTable(data) {
-    
+// func to build initial data table
+function buildTable(data) {    
     // first clear old data
     tbody.html("");
-
     // use forEach to iterate through data array
     //   use fat arrow function to write forEach cleaner
     //      for each row in data:
@@ -29,3 +28,28 @@ function buildTable(data) {
         });
     });
 }
+
+
+// func to filter after input ("click")
+function handleClick() {
+    // declare date var by using d3 to select first datetime id in html and get the value
+    let date = d3.select("#datetime").property("value")
+    // declare default filter aka not filtered
+    let filteredData = tableData;
+    // if there is a date:
+    if (date) {
+        // filter the data to only return when row data matches input date
+        //      in js, === is the equals operator for STRICT equality
+        filteredData = filteredData.filter(row => row.datetime === date);
+    };
+    // build table with filtered data (just original data if no filter)
+    buildTable(filteredData);
+};
+
+
+// code to tell page to call handleClick when the filter button is pushed by user
+d3.selectAll("#filter-btn").on("click", handleClick);
+
+
+// code to call initial table load when user navigates to page
+buildTable(tableData);
